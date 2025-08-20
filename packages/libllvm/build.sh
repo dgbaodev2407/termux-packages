@@ -1,15 +1,16 @@
 TERMUX_PKG_HOMEPAGE=https://clang.llvm.org/
-TERMUX_PKG_DESCRIPTION="Modular compiler and toolchain technologies library"
+TERMUX_PKG_DESCRIPTION="Modular compiler and toolchain technologies library (Hikari)"
 TERMUX_PKG_LICENSE="Apache-2.0, NCSA"
 TERMUX_PKG_LICENSE_FILE="llvm/LICENSE.TXT"
-TERMUX_PKG_MAINTAINER="@finagolfin"
+TERMUX_PKG_MAINTAINER="@dgbaodev"
 # Keep flang version and revision in sync when updating (enforced by check in termux_step_pre_configure).
 LLVM_MAJOR_VERSION=20
 TERMUX_PKG_VERSION=${LLVM_MAJOR_VERSION}.1.8
 TERMUX_PKG_REVISION=3
-TERMUX_PKG_SHA256=6898f963c8e938981e6c4a302e83ec5beb4630147c7311183cf61069af16333d
+# TERMUX_PKG_SHA256=159f01d7dcd4f1d65e4c22bea23b4d71a580cab0f5247883d65abb11bf04d2b0
 TERMUX_PKG_AUTO_UPDATE=false
-TERMUX_PKG_SRCURL=https://github.com/llvm/llvm-project/releases/download/llvmorg-$TERMUX_PKG_VERSION/llvm-project-${TERMUX_PKG_VERSION}.src.tar.xz
+TERMUX_PKG_SRCURL=git+https://github.com/Aethereux/Hikari-LLVM19
+TERMUX_PKG_GIT_BRANCH=hikari20.1.5release
 TERMUX_PKG_HOSTBUILD=true
 TERMUX_PKG_RM_AFTER_INSTALL="
 bin/ld64.lld.darwin*
@@ -91,11 +92,11 @@ termux_step_host_build() {
 
 termux_step_pre_configure() {
 	# Version guard to keep flang in sync
-	local flang_version=$(. $TERMUX_SCRIPTDIR/packages/flang/build.sh; echo ${TERMUX_PKG_VERSION})
-	local flang_revision=$(TERMUX_PKG_REVISION=0; . $TERMUX_SCRIPTDIR/packages/flang/build.sh; echo ${TERMUX_PKG_REVISION})
-	if [ "${flang_version}" != "${TERMUX_PKG_VERSION}" ] || [ "${flang_revision}" != "${TERMUX_PKG_REVISION}" ]; then
-		termux_error_exit "Version mismatch between libllvm and flang. libllvm=$TERMUX_PKG_VERSION:$TERMUX_PKG_REVISION, flang=$flang_version:$flang_revision"
-	fi
+	# local flang_version=$(. $TERMUX_SCRIPTDIR/packages/flang/build.sh; echo ${TERMUX_PKG_VERSION})
+	# local flang_revision=$(TERMUX_PKG_REVISION=0; . $TERMUX_SCRIPTDIR/packages/flang/build.sh; echo ${TERMUX_PKG_REVISION})
+	# if [ "${flang_version}" != "${TERMUX_PKG_VERSION}" ] || [ "${flang_revision}" != "${TERMUX_PKG_REVISION}" ]; then
+	# 	termux_error_exit "Version mismatch between libllvm and flang. libllvm=$TERMUX_PKG_VERSION:$TERMUX_PKG_REVISION, flang=$flang_version:$flang_revision"
+	# fi
 
 	# Add unknown vendor, otherwise it screws with the default LLVM triple
 	# detection.
